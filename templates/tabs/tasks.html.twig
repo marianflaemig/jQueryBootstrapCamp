@@ -1,0 +1,46 @@
+<div class="bg-light">
+
+    <div class="d-flex justify-content-between m-3 p-3 bg-white rounded-3 shadow-sm">
+        <h1>Tasks</h1>
+    </div>
+
+    <div class="d-flex flex-column m-3 p-3 bg-white rounded-3 shadow-sm">
+
+        <div class="d-flex justify-content-between">
+            <h2>Task List</h2>
+            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#taskModal" data-action="new">
+                Add New Task
+            </button>
+        </div>
+
+        <table id="task_list_table"
+               class="table table-striped table-bordered mt-4">
+            <tr>
+                <th>ID</th>
+                <th>Task Name</th>
+                <th>Assignee</th>
+                <th>Status</th>
+                <th>Due Date</th>
+                <th>Notes</th>
+                <th>Actions</th>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>Test</td>
+                <td>Robert</td>
+                <td>open</td>
+                <td>10.03.2025</td>
+                <td>-</td>
+                <td>
+                    <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#taskModal" data-action="new">
+                        Edit
+                    </button>
+                    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#taskModal" data-action="new">
+                        Delete
+                    </button>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+</div>

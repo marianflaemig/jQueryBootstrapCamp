@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Welcome!{% endblock %}</title>
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
+        {% block stylesheets %}
+
+        {% endblock %}
+
+        {% block javascripts %}
+            {% block importmap %}{{ importmap('app') }}{% endblock %}
+        {% endblock %}
+    </head>
+    <body>
+        <div class="container-fluid h-100 ">
+            <div class="row h-100">
+                <nav id="sidebarMenu"
+                     class="col-md-3 col-lg-2 d-md-block px-0 bg-secondary sidebar collapse">
+                    <div class="position-sticky">
+                        <div class="d-flex justify-content-center my-3">
+                            <img class="w-75 rounded-circle p-3"
+                                 src="{{ asset('images/task_manager.png') }}" alt="">
+                        </div>
+                        <ul class="nav flex-column">
+                            <li class="nav-item mx-0 py-4" data-content-id="dashboard-content">
+                                <a class="text-secondary nav-link text-decoration-none"
+                                   data-bs-toggle="tab" href="#dashboard-content">
+                                    <span class="h3 fw-lighter">Dashboard</span>
+                                </a>
+                            </li>
+                            <li class="nav-item mx-0 py-4 active" data-content-id="tasks-content">
+                                <a class="text-white nav-link text-decoration-none"
+                                   data-bs-toggle="tab" href="#tasks-content">
+                                    <span class="h3 fw-lighter">Tasks</span>
+                                </a>
+                            </li>
+                            <li class="nav-item mx-0 py-4" data-content-id="projects-content">
+                                <a class="text-white nav-link text-decoration-none"
+                                   data-bs-toggle="tab" href="#projects-content">
+                                    <span class="h3 fw-lighter">Projects</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+
+                <main class="col-md-9 col-lg-10 p-0">
+
+                    {% block body %}
+
+                    {% endblock %}
+
+                </main>
+            </div>
+        </div>
+
+    </body>
+</html>

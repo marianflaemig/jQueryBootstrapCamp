@@ -1,0 +1,38 @@
+@import url('../vendor/bootstrap/dist/css/bootstrap.min.css');
+
+html, body, main {
+    height: 100%;
+    margin: 0; /* Remove default margin */
+    padding: 0;
+}
+
+/* Custom CSS for Navigation Link Expansion */
+.sidebar .nav-item {
+    /* Optional: Sets the list item as the positioning context */
+    position: relative;
+    padding: 0 !important; /* Remove padding from LI to move it to A */
+}
+
+.sidebar .nav-item .nav-link {
+    display: block; /* Make the link a block element */
+    width: 100%;    /* Span the full width */
+    height: 100%;   /* Span the full height */
+    padding-top: 1rem;    /* Re-apply vertical padding inside the link */
+    padding-bottom: 1rem; /* Re-apply vertical padding inside the link */
+    padding-left: 1.5rem; /* Ensure consistent left padding */
+}
+
+/* Define the base styles for the sidebar */
+.sidebar .nav-item a {
+    transition: background-color 0.3s ease; /* Optional: smooth color transition */
+}
+
+/* Style for the active/clicked item */
+.sidebar .nav-item.active {
+    background-color: #4a4a4a !important; /* A slightly darker gray for the active state */
+}
+
+/* Ensure the text is visible on the dark background */
+.sidebar .nav-item.active a {
+    color: white !important;
+}

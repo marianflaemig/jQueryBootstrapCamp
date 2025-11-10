@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}DEMO{% endblock %}
+
+{% block body %}
+
+    {# Load the content for each tab using Twig's include function #}
+    {{ include('tabs/dashboard.html.twig') }}
+    {{ include('tabs/tasks.html.twig') }}
+    {{ include('tabs/projects.html.twig') }}
+
+{% endblock %}
