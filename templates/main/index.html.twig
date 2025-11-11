@@ -4,9 +4,13 @@
 
 {% block body %}
 
-    {# Load the content for each tab using Twig's include function #}
-    {{ include('tabs/dashboard.html.twig') }}
-    {{ include('tabs/tasks.html.twig') }}
-    {{ include('tabs/projects.html.twig') }}
+    <div class="tab-content w-100">
+
+        {# Load the content for each tab using Twig's include function #}
+        {{ include('tabs/dashboard.html.twig') }}
+        {{ include('tabs/tasks.html.twig') }}
+        {{ include('tabs/projects.html.twig') }}
+
+    </div>
 
 {% endblock %}

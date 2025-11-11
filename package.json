@@ -1,0 +1,17 @@
+{
+  "name": "jquerybootstrapcamp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/marianflaemig/jQueryBootstrapCamp.git"
+  },
+  "private": true,
+  "dependencies": {
+    "datatables.net": "^2.3.4"
+  }
+}

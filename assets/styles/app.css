@@ -32,6 +32,10 @@ html, body, main {
     background-color: #4a4a4a !important; /* A slightly darker gray for the active state */
 }
 
+.sidebar .nav-item:hover {
+    background-color: #6ea8fe;
+}
+
 /* Ensure the text is visible on the dark background */
 .sidebar .nav-item.active a {
     color: white !important;

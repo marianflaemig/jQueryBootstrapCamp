@@ -7,10 +7,13 @@
 import './styles/app.css';
 
 import 'bootstrap';
-import $ from 'jquery';
-import 'datatables';
+import { Tab } from 'bootstrap';
 
+import $ from 'jquery';
 window.$ = window.jQuery = $;
+
+import 'datatables.net';
+
 
 $(function() {
     console.log('jQuery and Bootstrap are ready!');
@@ -30,14 +33,49 @@ $(function() {
         // 2. Initialize DataTables on the first view of the 'Tasks' tab
         if (targetContentId === 'tasks-content' && !dataTableInitialized) {
             $('#task_list_table').DataTable({
-                // Your DataTables configuration here
+                "ajax": {
+                    // Points to the new Symfony Controller endpoint
+                    "url": "/tasks/data",
+                    "type": "GET",
+                    "dataSrc": function (json) {
+                        return json;
+                    },
+                    "error": function(xhr, error, thrown) {
+                        console.log("AJAX Error Details:", xhr.status, thrown);
+                        // You can add logic here to display a more user-friendly error message
+                    }
+                },
+                "columns": [
+                    { "data": "ID" },
+                    { "data": "Task Name" },
+                    { "data": "Assignee" },
+                    { "data": "Status" },
+                    { "data": "Due Date" },
+                    { "data": "Notes" },
+                    {
+                        "data": "Actions",
+                        "orderable": false, // Disable sorting on the Actions column
+                        "searchable": false // Disable searching on the Actions column
+                    }
+                ],
+                // ------------------------------------------------
+                "paging": true,
+                "searching": true,
+                "ordering": true,
+                "info": true
             });
             dataTableInitialized = true;
         }
     });
 
     // Manually trigger the 'Tasks' tab to show initially and initialize DataTables
-    $('a[href="#tasks-content"]').tab('show');
+    const taskLink = document.querySelector('a[href="#tasks-content"]');
+    if (taskLink) {
+        // 1. Get the Tab instance associated with the element
+        const taskTab = Tab.getOrCreateInstance(taskLink);
+        // 2. Call the show method on the instance
+        taskTab.show();
+    }
 
 
 });
