@@ -1,0 +1,18 @@
+{{ form_start(form) }}
+
+<div class="modal-body">
+    {# Render all fields in the standard Bootstrap layout #}
+    {{ form_widget(form) }}
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+    <button type="submit" class="btn btn-primary">{{ isNew ? 'Create Task' : 'Save Changes' }}</button>
+</div>
+
+{{ form_end(form) }}
+
+{# Update the modal title when the fragment loads #}
+<script>
+    document.getElementById('taskModalLabel').textContent = '{{ isNew ? 'Create New Task' : 'Edit Task #' ~ form.vars.value.id }}';
+</script>

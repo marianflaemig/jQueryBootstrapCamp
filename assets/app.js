@@ -7,15 +7,17 @@
 import './styles/app.css';
 
 import 'bootstrap';
-import { Tab } from 'bootstrap';
+import {Tab, Modal} from 'bootstrap';
 
 import $ from 'jquery';
+
 window.$ = window.jQuery = $;
 
 import 'datatables.net';
+import 'datatables.net-bs5';
 
 
-$(function() {
+$(function () {
     console.log('jQuery and Bootstrap are ready!');
 
     // Initialize DataTables only when the Tasks tab is clicked/visible
@@ -35,23 +37,23 @@ $(function() {
             $('#task_list_table').DataTable({
                 "ajax": {
                     // Points to the new Symfony Controller endpoint
-                    "url": "/tasks/data",
+                    "url": "/task/data",
                     "type": "GET",
                     "dataSrc": function (json) {
                         return json;
                     },
-                    "error": function(xhr, error, thrown) {
+                    "error": function (xhr, error, thrown) {
                         console.log("AJAX Error Details:", xhr.status, thrown);
                         // You can add logic here to display a more user-friendly error message
                     }
                 },
                 "columns": [
-                    { "data": "ID" },
-                    { "data": "Task Name" },
-                    { "data": "Assignee" },
-                    { "data": "Status" },
-                    { "data": "Due Date" },
-                    { "data": "Notes" },
+                    {"data": "ID"},
+                    {"data": "Task Name"},
+                    {"data": "Assignee"},
+                    {"data": "Status"},
+                    {"data": "Due Date"},
+                    {"data": "Notes"},
                     {
                         "data": "Actions",
                         "orderable": false, // Disable sorting on the Actions column
@@ -62,7 +64,7 @@ $(function() {
                 "paging": true,
                 "searching": true,
                 "ordering": true,
-                "info": true
+                "info": true,
             });
             dataTableInitialized = true;
         }
@@ -77,6 +79,70 @@ $(function() {
         taskTab.show();
     }
 
+    const taskModal = $('#taskModal');
+    const modalBody = $('#taskModalBody');
+
+    taskModal.on('show.bs.modal', function (event) {
+        const button = $(event.relatedTarget);
+        const taskId = button.data('task-id');
+
+        const url = taskId
+            ? `/task/form/${taskId}`
+            : '/task/form/';
+
+        modalBody.html('<p>Loading...</p>');
+        document.getElementById('taskModalLabel').textContent = 'Loading...';
+
+        $.ajax({
+            url: url,
+            method: 'GET',
+            success: function (html) {
+                modalBody.html(html);
+            },
+            error: function () {
+                modalBody.html('<div class="alert alert-danger">Error loading form.</div>');
+            }
+        })
+    });
+
+    modalBody.on('submit', 'form', function (e) {
+        e.preventDefault();
+
+        const form = $(this);
+        const url = form.attr('action');
+
+        $.ajax({
+            url: url,
+            method: 'POST',
+            data: form.serialize(),
+            success: function (response) {
+
+                const modalInstance = Modal.getInstance(taskModal);
+
+                if (modalInstance) {
+                    modalInstance.hide();
+                }
+                const dataTable = $('#task_list_table').DataTable();
+                dataTable.ajax.reload(null, false);
+            },
+            error: function (xhr) {
+                if (xhr.status === 400 && xhr.responseJSON && xhr.responseJSON.html) {
+                    // Inject the returned HTML (which contains the form and validation errors)
+                    modalBody.html(xhr.responseJSON.html);
+                } else {
+                    alert('An unexpected error occurred during submission.');
+                }
+            }
+        });
+    });
+
+    $(document).on('click', 'delete-btn', function (e) {
+        e.preventDefault();
+
+        if (!confirm("Are you sure you want to delete this task? This cannot be undone.")) {
+            return;
+        }
+    });
 
 });
 

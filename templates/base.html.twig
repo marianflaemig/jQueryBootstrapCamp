@@ -19,8 +19,10 @@
                      class="col-md-3 col-lg-2 d-md-block px-0 bg-secondary sidebar collapse">
                     <div class="position-sticky">
                         <div class="d-flex justify-content-center my-3">
-                            <img class="w-75 rounded-circle p-3"
-                                 src="{{ asset('images/task_manager.png') }}" alt="">
+                            <img class="w-75 p-3"
+{#                                 src="{{ asset('images/task_manager.png') }}" alt="">#}
+{#                                 src="{{ asset('images/planning_10109769.png') }}" alt="">#}
+                                 src="{{ asset('images/project-management_3286695.png') }}" alt="">
                         </div>
                         <ul class="nav flex-column">
                             <li class="nav-item mx-0 py-4" data-content-id="dashboard-content">
@@ -52,8 +54,22 @@
                     {% endblock %}
 
                 </main>
+
+                <div class="modal fade" id="taskModal" tabindex="-1" aria-labelledby="taskModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content shadow-lg rounded-4">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="taskModalLabel">Loading...</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body" id="taskModalBody">
+                                <p>Loading task form...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
-
     </body>
 </html>
