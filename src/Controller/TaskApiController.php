@@ -111,12 +111,45 @@ final class TaskApiController extends AbstractController
     #[Route('/task/delete/{id}', name: 'app_task_delete', methods: ['POST'])]
     public function delete(Task $task): Response
     {
+        $taskId = $task->getId();
+
         $this->entityManager->remove($task);
         $this->entityManager->flush();
 
         return new JsonResponse([
             'status' => 'success',
-            'message' => 'Task #' . $task->getId() . ' successfully deleted!',
+            'message' => 'Task #' . $taskId . ' successfully deleted!',
         ]);
+    }
+
+    #[Route('/task/status', name: 'app_task_status', methods: ['GET'])]
+    public function taskStatuses(): Response
+    {
+        $statuses = ['closed', 'cancelled', 'on hold', 'in progress'];
+
+        $result = [
+            'closed' => $this->taskRepository->numberOfTasks('closed'),
+            'cancelled' => $this->taskRepository->numberOfTasks('cancelled'),
+            'on hold' => $this->taskRepository->numberOfTasks('on hold'),
+            'in progress' => $this->taskRepository->numberOfTasks('in progress'),
+        ];
+
+        return new JsonResponse($result, Response::HTTP_OK);
+    }
+
+    #[Route('/task/employees', name: 'app_task_status_employees', methods: ['GET'])]
+    public function employeesTaskStatus(): Response
+    {
+        $data = [];
+
+        $employees = $this->taskRepository->getEmployees();
+        foreach ($employees as $employee) {
+            $data[] = [
+                'Assignee' => $employee['assignee'],
+                'Tasks' => $this->taskRepository->taskPerEmployee($employee['assignee']),
+            ];
+        }
+
+        return new JsonResponse($data, Response::HTTP_OK);
     }
 }

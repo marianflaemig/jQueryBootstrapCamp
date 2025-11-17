@@ -29,9 +29,10 @@ class TaskType extends AbstractType
             ])
             ->add('status', ChoiceType::class, [
                 'choices' => [
-                    'Open' => 'open',
-                    'In Progress' => 'in-progress',
+                    'In Progress' => 'in progress',
                     'Closed' => 'closed',
+                    'Cancelled' => 'cancelled',
+                    'On Hold' => 'on hold',
                 ],
                 'label' => 'Status',
                 'attr' => [

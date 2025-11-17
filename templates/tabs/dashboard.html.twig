@@ -1,4 +1,41 @@
 <div id="dashboard-content" class="tab-pane fade">
-    <h2>Dashboard Overview</h2>
-    <p>A summary of your projects and task status goes here.</p>
+    <div class="d-flex flex-column m-5 p-3 bg-white rounded-3 shadow-lg">
+        <h2 class="text-capitalize">Dashboard Overview</h2>
+        <p>A comprehensive summary of your project statues and team performance metrics.</p>
+    </div>
+
+    <div class="container-fluid ">
+        <div class="row">
+            <div class="col m-5 p-3 bg-white rounded-3 shadow-lg text-center">
+                <h3 class="pb-3">Project Status</h3>
+                <div class="d-flex h-75 justify-content-center align-items-center">
+                    <canvas id="statusChart" class="align-self-center" ></canvas>
+                </div>
+            </div>
+            <div class="col m-5 p-3 bg-white rounded-3 shadow-lg text-center">
+                <h3 class="pb-3">Upcoming Deadlines</h3>
+                Taskname 1 - Tomorrow
+            </div>
+            <div class="col m-5 p-3 bg-white rounded-3 shadow-lg text-center">
+                <h3 class="pb-3">Team Activity</h3>
+                <table data-order='[[ 1, "desc" ]]' data-page-length='5'
+                       id="employee_task_table" class="table table-striped table-bordered">
+                    <thead>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col m-5 p-3 bg-white rounded-3 shadow-lg text-center">
+
+            </div>
+            <div class="col m-5 p-3 bg-white rounded-3 shadow-lg text-center">
+
+            </div>
+
+        </div>
+    </div>
+
 </div>

@@ -1,3 +1,4 @@
+import './stimulus_bootstrap.js';
 /*
  * Welcome to your app's main JavaScript file!
  *
@@ -16,12 +17,15 @@ window.$ = window.jQuery = $;
 import 'datatables.net';
 import 'datatables.net-bs5';
 
+import 'chart.js';
+
 
 $(function () {
     console.log('jQuery and Bootstrap are ready!');
 
     // Initialize DataTables only when the Tasks tab is clicked/visible
     let dataTableInitialized = false;
+    let employeeTableInitialized = false;
 
     // Listen for the Bootstrap 'shown.bs.tab' event on the content panels
     $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function (e) {
@@ -44,7 +48,6 @@ $(function () {
                     },
                     "error": function (xhr, error, thrown) {
                         console.log("AJAX Error Details:", xhr.status, thrown);
-                        // You can add logic here to display a more user-friendly error message
                     }
                 },
                 "columns": [
@@ -66,7 +69,86 @@ $(function () {
                 "ordering": true,
                 "info": true,
             });
+
             dataTableInitialized = true;
+
+        } else if (targetContentId === 'dashboard-content') {
+
+            // dashboard page status chart
+            $.ajax({
+                url: '/task/status',
+                method: 'GET',
+                success: function (response) {
+
+                    const xValues = ['in progress', 'closed', 'cancelled', 'on hold'];
+                    const yValues = [
+                        response['in progress'],
+                        response['closed'],
+                        response['cancelled'],
+                        response['on hold'],
+                    ];
+
+                    const barColors = [
+                        "#b91d47",
+                        "#00aba9",
+                        "#2b5797",
+                        "#e8c3b9",
+                        // "#1e7145"
+                    ];
+
+                    new Chart('statusChart', {
+                        type: 'doughnut',
+                        data: {
+                            labels: xValues,
+                            datasets: [{
+                                backgroundColor: barColors,
+                                data: yValues
+                            }]
+                        },
+                        options: {
+                            responsive: false,
+                            legend: {
+                                display: true,
+                                position: 'right',
+                            },
+                        },
+                    });
+                },
+                error: function () {
+                    alert('An error occurred while fetching task status graph.');
+                }
+            });
+
+            // employee status table
+            if (employeeTableInitialized === false) {
+
+                $('#employee_task_table').DataTable({
+                    "ajax": {
+                        // Points to the new Symfony Controller endpoint
+                        "url": "/task/employees",
+                        "type": "GET",
+                        "dataSrc": function (json) {
+                            return json;
+                        },
+                        "error": function (xhr, error, thrown) {
+                            console.log("AJAX Error Details:", xhr.status, thrown);
+                        }
+                    },
+                    "columns": [
+                        {"data": "Assignee"},
+                        {
+                            "data": "Tasks",
+                        },
+                    ],
+                    // ------------------------------------------------
+                    "paging": false,
+                    "ordering": false,
+                    "searching": false,
+                    "info": false,
+                });
+
+                employeeTableInitialized = true;
+            }
         }
     });
 
@@ -117,6 +199,12 @@ $(function () {
             data: form.serialize(),
             success: function (response) {
 
+                // Remove focus from the currently active element (the Submit button).
+                // This resolves the aria-hidden focus conflict/warning.
+                if (document.activeElement) {
+                    document.activeElement.blur();
+                }
+
                 const modalInstance = Modal.getInstance(taskModal);
 
                 if (modalInstance) {
@@ -136,14 +224,37 @@ $(function () {
         });
     });
 
-    $(document).on('click', 'delete-btn', function (e) {
+    $('#tasks-content').on('click', '.delete-btn', function (e) {
         e.preventDefault();
 
         if (!confirm("Are you sure you want to delete this task? This cannot be undone.")) {
             return;
         }
-    });
 
+        const button = $(this);
+        const taskId = button.data('task-id');
+
+        $.ajax({
+            url: `/task/delete/${taskId}`,
+            method: 'POST',
+            success: function (response) {
+                console.log(response.message);
+
+                // Remove focus from the currently active element (the Delete button).
+                // This resolves the aria-hidden focus conflict/warning.
+                if (document.activeElement) {
+                    document.activeElement.blur();
+                }
+
+                // IMPORTANT: Reload DataTables content to show deletion instantly
+                const dataTable = $('#task_list_table').DataTable();
+                dataTable.ajax.reload(null, false);
+            },
+            error: function () {
+                alert('An error occurred while deleting the task.');
+            }
+        });
+    });
 });
 
 console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉');
