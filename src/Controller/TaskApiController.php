@@ -152,4 +152,20 @@ final class TaskApiController extends AbstractController
 
         return new JsonResponse($data, Response::HTTP_OK);
     }
+
+    #[Route('/task/upcoming', name: 'app_task_upcoming', methods: ['GET'])]
+    public function upcomingTasks(): Response
+    {
+        $data = [];
+
+        $tasks = $this->taskRepository->upcomingTasks();
+        foreach ($tasks as $task) {
+            $data[] = [
+                'Name' => $task['name'],
+                'DueDate' => date('d/m/y',$task['dueDate']->getTimestamp()),
+            ];
+        }
+
+        return new JsonResponse($data, Response::HTTP_OK);
+    }
 }

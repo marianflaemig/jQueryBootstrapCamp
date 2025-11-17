@@ -26,7 +26,7 @@ class TaskRepository extends ServiceEntityRepository
             return -1;
         }
 
-        return (int) $this->createQueryBuilder('task')
+        return (int)$this->createQueryBuilder('task')
             ->select('COUNT(task.id)')
             ->where('task.status = :status')
             ->setParameter('status', $status)
@@ -51,6 +51,20 @@ class TaskRepository extends ServiceEntityRepository
             ->setParameter('employee', $employee)
             ->getQuery()
             ->getSingleScalarResult();
+    }
+
+    public function upcomingTasks()
+    {
+        $now = new \DateTime();
+
+        return $this->createQueryBuilder('task')
+            ->select('task.name, task.dueDate')
+            ->where('task.dueDate >= :now')
+            ->orderBy('task.dueDate', 'ASC')
+            ->setParameter('now', $now)
+            ->getQuery()
+            ->setMaxResults(5)
+            ->getResult();
     }
 
     //    /**

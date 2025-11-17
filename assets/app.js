@@ -26,6 +26,7 @@ $(function () {
     // Initialize DataTables only when the Tasks tab is clicked/visible
     let dataTableInitialized = false;
     let employeeTableInitialized = false;
+    let upcommingTasksTableInitialized = false;
 
     // Listen for the Bootstrap 'shown.bs.tab' event on the content panels
     $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function (e) {
@@ -149,6 +150,35 @@ $(function () {
 
                 employeeTableInitialized = true;
             }
+
+            // upcomming tasks table
+            if (upcommingTasksTableInitialized === false) {
+
+                $('#upcoming_tasks_table').DataTable({
+                    "ajax": {
+                        // Points to the new Symfony Controller endpoint
+                        "url": "/task/upcoming",
+                        "type": "GET",
+                        "dataSrc": function (json) {
+                            return json;
+                        },
+                        "error": function (xhr, error, thrown) {
+                            console.log("AJAX Error Details:", xhr.status, thrown);
+                        }
+                    },
+                    "columns": [
+                        {"data": "Name"},
+                        {"data": "DueDate"},
+                    ],
+                    // ------------------------------------------------
+                    "paging": false,
+                    "ordering": false,
+                    "searching": false,
+                    "info": false,
+                });
+
+                upcommingTasksTableInitialized = true;
+            }
         }
     });
 
@@ -161,6 +191,7 @@ $(function () {
         taskTab.show();
     }
 
+    // create modal to edit/create tasks
     const taskModal = $('#taskModal');
     const modalBody = $('#taskModalBody');
 
