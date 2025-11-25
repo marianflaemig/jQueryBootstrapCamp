@@ -1,0 +1,10 @@
+# config/packages/asset_mapper.yaml
+
+asset_mapper:
+    # Ensure both paths are included here
+    paths:
+        # Main project assets
+        '%kernel.project_dir%/assets': ~
+
+        # Vendor assets (where packages like bootstrap are downloaded)
+        '%kernel.project_dir%/assets/vendor': ~
